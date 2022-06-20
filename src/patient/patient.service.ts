@@ -9,4 +9,12 @@ export class PatientService {
 	async addPatient(patient: Patient) {
 		return this.prismaSerice.patient.create({ data: patient })
 	}
+
+	async findByID(id: string): Promise<Patient> {
+		return this.prismaSerice.patient.findFirst({ where: { id } })
+	}
+
+	async findByNationalOrPassportID(nationalId: string, passportId: string): Promise<Patient> {
+		return this.prismaSerice.patient.findFirst({ where: { OR: [{ passportId }, { nationalId }] } })
+	}
 }
