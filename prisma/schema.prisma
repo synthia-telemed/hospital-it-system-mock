@@ -70,10 +70,10 @@ model Appointment {
   doctorId        Int
   dateTime        DateTime
   detail          String
-  nextAppointment DateTime
-  status          AppointmentStatus
+  nextAppointment DateTime?
+  status          AppointmentStatus @default(SCHEDULED)
   Prescription    Prescription[]
-  Invoice         Invoice[]
+  Invoice         Invoice?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -104,8 +104,8 @@ model Prescription {
 model Invoice {
   id            Int           @id @default(autoincrement())
   appointment   Appointment   @relation(fields: [appointmentId], references: [id])
-  appointmentId Int
-  paid          Boolean
+  appointmentId Int           @unique
+  paid          Boolean       @default(false)
   total         Float
   InvoiceItem   InvoiceItem[]
 
