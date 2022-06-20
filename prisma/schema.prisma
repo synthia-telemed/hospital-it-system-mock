@@ -54,6 +54,7 @@ model Doctor {
   initial_en   String
   firstname_en String
   lastname_en  String
+  position     String
   Appointment  Appointment[]
 
   createdAt DateTime @default(now())
