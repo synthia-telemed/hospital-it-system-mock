@@ -10,6 +10,7 @@ import { PatientModule } from './patient/patient.module'
 		PatientModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
+			playground: false,
 			plugins: [ApolloServerPluginLandingPageLocalDefault()],
 			autoSchemaFile: true,
 			sortSchema: true,
