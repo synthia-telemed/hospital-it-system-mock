@@ -30,7 +30,6 @@ enum AppointmentStatus {
 }
 
 model Patient {
-  /// @HideField({ output: true, input: false })
   id           String        @id
   initial_th   String
   firstname_th String
@@ -54,7 +53,6 @@ model Patient {
 }
 
 model Doctor {
-  /// @HideField({ output: true, input: false })
   id           Int           @id @default(autoincrement())
   initial_th   String
   firstname_th String
@@ -71,7 +69,6 @@ model Doctor {
 }
 
 model Appointment {
-  /// @HideField({ output: true, input: false })
   id              Int               @id @default(autoincrement())
   patient         Patient           @relation(fields: [patientId], references: [id])
   patientId       String
@@ -89,7 +86,6 @@ model Appointment {
 }
 
 model Medicine {
-  /// @HideField({ output: true, input: false })
   id           Int            @id @default(autoincrement())
   name         String
   description  String
@@ -100,7 +96,6 @@ model Medicine {
 }
 
 model Prescription {
-  /// @HideField({ output: true, input: false })
   id            Int         @id @default(autoincrement())
   medicine      Medicine    @relation(fields: [medicineId], references: [id])
   medicineId    Int
@@ -113,7 +108,6 @@ model Prescription {
 }
 
 model Invoice {
-  /// @HideField({ output: true, input: false })
   id            Int           @id @default(autoincrement())
   appointment   Appointment   @relation(fields: [appointmentId], references: [id])
   appointmentId Int           @unique
@@ -126,7 +120,6 @@ model Invoice {
 }
 
 model InvoiceItem {
-  /// @HideField({ output: true, input: false })
   id        Int     @id @default(autoincrement())
   name      String
   price     Float
