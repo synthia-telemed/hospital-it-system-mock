@@ -4,6 +4,7 @@ import { GraphQLModule } from '@nestjs/graphql'
 import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
 import { AppController } from './app.controller'
 import { PatientModule } from './patient/patient.module'
+import { DoctorModule } from './doctor/doctor.module'
 
 @Module({
 	imports: [
@@ -15,6 +16,7 @@ import { PatientModule } from './patient/patient.module'
 			autoSchemaFile: true,
 			sortSchema: true,
 		}),
+		DoctorModule,
 	],
 	controllers: [AppController],
 })
