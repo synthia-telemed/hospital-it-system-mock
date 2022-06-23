@@ -13,4 +13,8 @@ export class PatientService {
 	async findOne(where: Prisma.PatientWhereInput): Promise<Patient> {
 		return this.prismaSerice.patient.findFirst({ where })
 	}
+
+	async findMany(condition: Prisma.PatientFindManyArgs): Promise<Patient[]> {
+		return this.prismaSerice.patient.findMany(condition)
+	}
 }
