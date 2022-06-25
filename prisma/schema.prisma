@@ -45,7 +45,7 @@ model Patient {
   height       Float
   birthDate    DateTime
   bloodType    BloodType
-  Appointment  Appointment[]
+  appointments Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -61,7 +61,7 @@ model Doctor {
   firstname_en String
   lastname_en  String
   position     String
-  Appointment  Appointment[]
+  appointments Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -78,18 +78,18 @@ model Appointment {
   detail          String
   nextAppointment DateTime?
   status          AppointmentStatus @default(SCHEDULED)
-  Prescription    Prescription[]
-  Invoice         Invoice?
+  prescriptions   Prescription[]
+  invoice         Invoice?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Medicine {
-  id           Int            @id @default(autoincrement())
-  name         String
-  description  String
-  Prescription Prescription[]
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String
+  prescriptions Prescription[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -113,7 +113,7 @@ model Invoice {
   appointmentId Int           @unique
   paid          Boolean       @default(false)
   total         Float
-  InvoiceItem   InvoiceItem[]
+  invoiceItems  InvoiceItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -124,7 +124,7 @@ model InvoiceItem {
   name      String
   price     Float
   quantity  Int
-  Invoice   Invoice @relation(fields: [invoiceId], references: [id])
+  invoice   Invoice @relation(fields: [invoiceId], references: [id])
   invoiceId Int
 
   createdAt DateTime @default(now())
