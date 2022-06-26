@@ -7,6 +7,7 @@ import { PatientModule } from './patient/patient.module'
 import { DoctorModule } from './doctor/doctor.module'
 import { MedicineModule } from './medicine/medicine.module'
 import { PrescriptionModule } from './prescription/prescription.module'
+import { InvoiceModule } from './invoice/invoice.module';
 
 @Module({
 	imports: [
@@ -21,6 +22,7 @@ import { PrescriptionModule } from './prescription/prescription.module'
 		DoctorModule,
 		MedicineModule,
 		PrescriptionModule,
+		InvoiceModule,
 	],
 	controllers: [AppController],
 })
