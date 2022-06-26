@@ -1,24 +1,31 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { GraphQLResolveInfo } from 'graphql'
+import { BaseResolver } from 'src/@generated/base.resolver'
 import { FindManyMedicineArgs, MedicineCreateInput, MedicineWhereInput } from 'src/@generated/medicine'
 import { Medicine } from 'src/@generated/medicine/medicine.model'
-import { MedicineService } from './medicine.service'
+import { PrismaService } from 'src/prisma.service'
 
 @Resolver(_of => Medicine)
-export class MedicineResolver {
-	constructor(private readonly medicineService: MedicineService) {}
+export class MedicineResolver extends BaseResolver {
+	constructor(private readonly prismaService: PrismaService) {
+		super()
+	}
 
 	@Mutation(_returns => Medicine)
-	async createMedicine(@Args('medicine') data: MedicineCreateInput): Promise<Medicine | null> {
-		return this.medicineService.add(data)
+	async createMedicine(
+		@Args('medicine') data: MedicineCreateInput,
+		@Info() info: GraphQLResolveInfo
+	): Promise<Medicine | null> {
+		return this.prismaService.medicine.create({ data, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => Medicine, { nullable: true })
-	async medicine(@Args('where') where: MedicineWhereInput): Promise<Medicine> {
-		return this.medicineService.findOne(where)
+	async medicine(@Args('where') where: MedicineWhereInput, @Info() info: GraphQLResolveInfo): Promise<Medicine> {
+		return this.prismaService.medicine.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => [Medicine])
-	async medicines(@Args() condition: FindManyMedicineArgs): Promise<Medicine[]> {
-		return this.medicineService.findMany(condition)
+	async medicines(@Args() condition: FindManyMedicineArgs, @Info() info: GraphQLResolveInfo): Promise<Medicine[]> {
+		return this.prismaService.medicine.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 }

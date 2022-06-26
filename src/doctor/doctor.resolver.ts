@@ -1,23 +1,30 @@
-import { Args, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { GraphQLResolveInfo } from 'graphql'
+import { BaseResolver } from 'src/@generated/base.resolver'
 import { Doctor, DoctorCreateInput, DoctorWhereInput, FindManyDoctorArgs } from 'src/@generated/doctor'
-import { DoctorService } from './doctor.service'
+import { PrismaService } from 'src/prisma.service'
 
 @Resolver(_of => Doctor)
-export class DoctorResolver {
-	constructor(private readonly doctorService: DoctorService) {}
+export class DoctorResolver extends BaseResolver {
+	constructor(private readonly prismaService: PrismaService) {
+		super()
+	}
 
 	@Query(_returns => Doctor, { nullable: true })
-	async doctor(@Args('where') where: DoctorWhereInput): Promise<Doctor> {
-		return this.doctorService.findOne(where)
+	async doctor(@Args('where') where: DoctorWhereInput, @Info() info: GraphQLResolveInfo): Promise<Doctor> {
+		return this.prismaService.doctor.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => [Doctor])
-	async doctors(@Args() condition: FindManyDoctorArgs): Promise<any> {
-		return this.doctorService.findMany(condition)
+	async doctors(@Args() condition: FindManyDoctorArgs, @Info() info: GraphQLResolveInfo): Promise<any> {
+		return this.prismaService.doctor.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 
 	@Mutation(_returns => Doctor)
-	async createDoctor(@Args('doctor') data: DoctorCreateInput): Promise<Doctor | null> {
-		return this.doctorService.add(data)
+	async createDoctor(
+		@Args('doctor') data: DoctorCreateInput,
+		@Info() info: GraphQLResolveInfo
+	): Promise<Doctor | null> {
+		return this.prismaService.doctor.create({ data, ...this.getPrismaSelect(info) })
 	}
 }

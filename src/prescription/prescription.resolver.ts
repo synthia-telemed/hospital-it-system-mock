@@ -20,8 +20,7 @@ export class PrescriptionResolver extends BaseResolver {
 		@Args('prescription') data: PrescriptionCreateInput,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Prescription> {
-		const select = this.getPrismaSelect(info)
-		return this.prismaService.prescription.create({ data, ...select })
+		return this.prismaService.prescription.create({ data, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => Prescription, { nullable: true })
@@ -29,8 +28,7 @@ export class PrescriptionResolver extends BaseResolver {
 		@Args('where') where: PrescriptionWhereInput,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Prescription> {
-		const select = this.getPrismaSelect(info)
-		return this.prismaService.prescription.findFirst({ where, ...select })
+		return this.prismaService.prescription.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => [Prescription])
@@ -38,7 +36,6 @@ export class PrescriptionResolver extends BaseResolver {
 		@Args() condition: FindManyPrescriptionArgs,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Prescription[]> {
-		const select = this.getPrismaSelect(info)
-		return this.prismaService.prescription.findMany({ ...condition, ...select })
+		return this.prismaService.prescription.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 }
