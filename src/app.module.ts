@@ -6,6 +6,7 @@ import { AppController } from './app.controller'
 import { PatientModule } from './patient/patient.module'
 import { DoctorModule } from './doctor/doctor.module'
 import { MedicineModule } from './medicine/medicine.module'
+import { PrescriptionModule } from './prescription/prescription.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { MedicineModule } from './medicine/medicine.module'
 		}),
 		DoctorModule,
 		MedicineModule,
+		PrescriptionModule,
 	],
 	controllers: [AppController],
 })
