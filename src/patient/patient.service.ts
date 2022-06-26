@@ -6,7 +6,7 @@ import { PrismaService } from 'src/prisma.service'
 export class PatientService {
 	constructor(private readonly prismaSerice: PrismaService) {}
 
-	async addPatient(patient: Prisma.PatientCreateInput) {
+	async add(patient: Prisma.PatientCreateInput) {
 		return this.prismaSerice.patient.create({ data: patient })
 	}
 

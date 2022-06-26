@@ -17,6 +17,6 @@ export class DoctorResolver {
 
 	@Mutation(returns => Doctor)
 	async createDoctor(@Args('doctor') data: DoctorCreateInput): Promise<Doctor | null> {
-		return this.doctorService.addDoctor(data)
+		return this.doctorService.add(data)
 	}
 }

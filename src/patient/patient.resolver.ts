@@ -8,7 +8,7 @@ export class PatientResolver {
 
 	@Mutation(returns => Patient)
 	async createPatient(@Args('patient') data: PatientCreateInput): Promise<Patient | null> {
-		return this.patientService.addPatient(data)
+		return this.patientService.add(data)
 	}
 
 	@Query(returns => Patient, { nullable: true })

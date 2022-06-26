@@ -14,7 +14,7 @@ export class DoctorService {
 		return this.prismaService.doctor.findMany(condition)
 	}
 
-	async addDoctor(doctor: Prisma.DoctorCreateInput) {
+	async add(doctor: Prisma.DoctorCreateInput) {
 		return this.prismaService.doctor.create({ data: doctor })
 	}
 }
