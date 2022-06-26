@@ -902,6 +902,20 @@
     consola "^2.15.0"
     node-fetch "^2.6.1"
 
+"@paljs/plugins@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@paljs/plugins/-/plugins-4.1.0.tgz#89888b0705e1b19a8f8e79d8dca24564d7c3a171"
+  integrity sha512-6N1Gb/wJ27EyyI1VxyXyyr3bB8lVSjFpKj7Lfqjb65dwqZ2ImTRKdbxRnnp9nFEyVAkFZK4uqRVyha8JDhKkFQ==
+  dependencies:
+    "@paljs/types" "^4.0.18"
+    graphql-fields "2.0.3"
+    graphql-tag "2.12.6"
+
+"@paljs/types@^4.0.18":
+  version "4.0.18"
+  resolved "https://registry.yarnpkg.com/@paljs/types/-/types-4.0.18.tgz#baa82e965d30ee5653476441782205b66c800efc"
+  integrity sha512-dsp7uA9VZgLzkygbsNm9Q3krBcUchAs8urMCMyNIYgfHh5hWgcYf9Jkm9gGb0TE7QMswaXEwsEAzA3uOfyB3CQ==
+
 "@prisma/client@^3.15.2":
   version "3.15.2"
   resolved "https://registry.yarnpkg.com/@prisma/client/-/client-3.15.2.tgz#2181398147afc79bfe0d83c03a88dc45b49bd365"
@@ -3139,6 +3153,11 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.6, graceful-fs@^4.2.0, graceful-fs@^4.2.4, 
   version "4.2.9"
   resolved "https://registry.yarnpkg.com/graceful-fs/-/graceful-fs-4.2.9.tgz#041b05df45755e587a24942279b9d113146e1c96"
   integrity sha512-NtNxqUcXgpW2iMrfqSfR73Glt39K+BLwWsPs94yR63v45T0Wbej7eRmL5cWfwEgqXnmjQp3zaJTshdRW/qC2ZQ==
+
+graphql-fields@2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/graphql-fields/-/graphql-fields-2.0.3.tgz#5e68dff7afbb202be4f4f40623e983b22c96ab8f"
+  integrity sha512-x3VE5lUcR4XCOxPIqaO4CE+bTK8u6gVouOdpQX9+EKHr+scqtK5Pp/l8nIGqIpN1TUlkKE6jDCCycm/WtLRAwA==
 
 graphql-tag@2.12.6, graphql-tag@^2.11.0:
   version "2.12.6"
