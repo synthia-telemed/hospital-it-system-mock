@@ -5,6 +5,7 @@ import { ApolloServerPluginLandingPageLocalDefault } from 'apollo-server-core'
 import { AppController } from './app.controller'
 import { PatientModule } from './patient/patient.module'
 import { DoctorModule } from './doctor/doctor.module'
+import { MedicineModule } from './medicine/medicine.module'
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { DoctorModule } from './doctor/doctor.module'
 			sortSchema: true,
 		}),
 		DoctorModule,
+		MedicineModule,
 	],
 	controllers: [AppController],
 })
