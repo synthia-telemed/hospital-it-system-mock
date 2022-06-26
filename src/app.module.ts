@@ -8,7 +8,7 @@ import { DoctorModule } from './doctor/doctor.module'
 import { MedicineModule } from './medicine/medicine.module'
 import { PrescriptionModule } from './prescription/prescription.module'
 import { InvoiceModule } from './invoice/invoice.module'
-import { AppointmentModule } from './appointment/appointment.module';
+import { AppointmentModule } from './appointment/appointment.module'
 
 @Module({
 	imports: [
