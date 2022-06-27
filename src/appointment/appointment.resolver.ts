@@ -6,7 +6,7 @@ import {
 	AppointmentWhereInput,
 	FindManyAppointmentArgs,
 } from 'src/@generated/appointment'
-import { BaseResolver } from 'src/@generated/base.resolver'
+import { BaseResolver } from 'src/base.resolver'
 import { PrismaService } from 'src/prisma.service'
 
 @Resolver(_of => Appointment)

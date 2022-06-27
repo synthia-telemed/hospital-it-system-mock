@@ -7,7 +7,7 @@ import {
 	PrescriptionWhereInput,
 } from 'src/@generated/prescription'
 import { PrismaService } from 'src/prisma.service'
-import { BaseResolver } from 'src/@generated/base.resolver'
+import { BaseResolver } from 'src/base.resolver'
 
 @Resolver(_of => Prescription)
 export class PrescriptionResolver extends BaseResolver {

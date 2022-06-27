@@ -1,6 +1,6 @@
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GraphQLResolveInfo } from 'graphql'
-import { BaseResolver } from 'src/@generated/base.resolver'
+import { BaseResolver } from 'src/base.resolver'
 import { Doctor, DoctorCreateInput, DoctorWhereInput, FindManyDoctorArgs } from 'src/@generated/doctor'
 import { PrismaService } from 'src/prisma.service'
 

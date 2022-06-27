@@ -1,6 +1,6 @@
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
 import { GraphQLResolveInfo } from 'graphql'
-import { BaseResolver } from 'src/@generated/base.resolver'
+import { BaseResolver } from 'src/base.resolver'
 import { FindManyInvoiceArgs, Invoice, InvoiceCreateInput, InvoiceWhereInput } from 'src/@generated/invoice'
 import { PrismaService } from 'src/prisma.service'
 
