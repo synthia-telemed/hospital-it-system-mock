@@ -2,9 +2,9 @@
   "name": "hospital-it-system-mock",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "Sethanant Pipatpakorn",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "scripts": {
     "prebuild": "rimraf dist && yarn prisma-generate",
     "build": "nest build",
