@@ -11,7 +11,6 @@ env:
   REGISTRY: synthiatelemed.azurecr.io
   IMAGE_NAME: hospital-it-system-mock
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -35,7 +34,7 @@ jobs:
         uses: docker/metadata-action@v4
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-          types: |
+          tags: |
             type=raw,value=latest
             type=sha,format=long,prefix=
 
