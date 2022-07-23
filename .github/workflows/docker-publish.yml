@@ -10,6 +10,7 @@ on:
 env:
   REGISTRY: synthiatelemed.azurecr.io
   IMAGE_NAME: hospital-it-system-mock
+  DISPATCH_TO: synthia-telemed/infrastructure
 
 jobs:
   build:
@@ -47,4 +48,12 @@ jobs:
           platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT }}
+          repository: ${{ env.DISPATCH_TO }}
+          event-type: new-image
+          client-payload: '{"image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"}'
 
