@@ -11,6 +11,7 @@ WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
 RUN yarn install --frozen-lockfile --production
+COPY prisma/schema.prisma ./prisma/schema.prisma
 RUN yarn prisma-generate
 COPY --from=builder /app/dist ./dist
 CMD ["yarn", "start:prod"]
