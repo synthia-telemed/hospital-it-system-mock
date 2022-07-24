@@ -11,6 +11,7 @@ env:
   REGISTRY: synthiatelemed.azurecr.io
   IMAGE_NAME: hospital-it-system-mock
   DISPATCH_TO: synthia-telemed/infrastructure
+  EVENT_NAME: hospital-mock-new-image
 
 jobs:
   build:
@@ -54,6 +55,6 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           repository: ${{ env.DISPATCH_TO }}
-          event-type: new-image
+          event-type: ${{ env.EVENT_NAME }}
           client-payload: '{"image": "${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ github.sha }}"}'
 
