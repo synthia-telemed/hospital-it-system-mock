@@ -20,10 +20,15 @@ export class PatientResolver extends BaseResolver {
 
 	@Query(_returns => Patient, { nullable: true })
 	async patient(@Args('where') where: PatientWhereInput, @Info() info: GraphQLResolveInfo): Promise<Patient> {
-		return this.prismaService.patient.findFirst({ where, ...this.getPrismaSelect(info) })
+		this.cleanEmptyWhereField(where)
+		return this.prismaService.patient.findFirst({
+			where,
+			...this.getPrismaSelect(info),
+		})
 	}
 	@Query(_returns => [Patient])
 	async patients(@Args() condition: FindManyPatientArgs, @Info() info: GraphQLResolveInfo): Promise<any> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.patient.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 }

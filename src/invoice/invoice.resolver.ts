@@ -17,11 +17,13 @@ export class InvoiceResolver extends BaseResolver {
 
 	@Query(_returns => [Invoice])
 	async invoices(@Args() condition: FindManyInvoiceArgs, @Info() info: GraphQLResolveInfo): Promise<any> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.invoice.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => Invoice, { nullable: true })
 	async invoice(@Args('where') where: InvoiceWhereInput, @Info() info: GraphQLResolveInfo): Promise<Invoice> {
+		this.cleanEmptyWhereField(where)
 		return this.prismaService.invoice.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 }
