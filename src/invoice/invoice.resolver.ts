@@ -16,7 +16,7 @@ export class InvoiceResolver extends BaseResolver {
 	}
 
 	@Query(_returns => [Invoice])
-	async invoices(@Args() condition: FindManyInvoiceArgs, @Info() info: GraphQLResolveInfo): Promise<any> {
+	async invoices(@Args() condition: FindManyInvoiceArgs, @Info() info: GraphQLResolveInfo): Promise<Invoice[]> {
 		this.cleanEmptyWhereField(condition)
 		return this.prismaService.invoice.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
