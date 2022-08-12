@@ -24,7 +24,11 @@ export class InvoiceItemResolver extends BaseResolver {
 	}
 
 	@Query(_returns => [InvoiceItem])
-	async invoiceItems(@Args() condition: FindManyInvoiceItemArgs, @Info() info: GraphQLResolveInfo): Promise<any> {
+	async invoiceItems(
+		@Args() condition: FindManyInvoiceItemArgs,
+		@Info() info: GraphQLResolveInfo
+	): Promise<InvoiceItem[]> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.invoiceItem.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 
@@ -33,6 +37,7 @@ export class InvoiceItemResolver extends BaseResolver {
 		@Args('where') where: InvoiceItemWhereInput,
 		@Info() info: GraphQLResolveInfo
 	): Promise<InvoiceItem> {
+		this.cleanEmptyWhereField(where)
 		return this.prismaService.invoiceItem.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 }

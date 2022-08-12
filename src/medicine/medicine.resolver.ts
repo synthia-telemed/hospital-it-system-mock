@@ -21,11 +21,13 @@ export class MedicineResolver extends BaseResolver {
 
 	@Query(_returns => Medicine, { nullable: true })
 	async medicine(@Args('where') where: MedicineWhereInput, @Info() info: GraphQLResolveInfo): Promise<Medicine> {
+		this.cleanEmptyWhereField(where)
 		return this.prismaService.medicine.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 
 	@Query(_returns => [Medicine])
 	async medicines(@Args() condition: FindManyMedicineArgs, @Info() info: GraphQLResolveInfo): Promise<Medicine[]> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.medicine.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 }

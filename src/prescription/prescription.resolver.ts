@@ -28,6 +28,7 @@ export class PrescriptionResolver extends BaseResolver {
 		@Args('where') where: PrescriptionWhereInput,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Prescription> {
+		this.cleanEmptyWhereField(where)
 		return this.prismaService.prescription.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 
@@ -36,6 +37,7 @@ export class PrescriptionResolver extends BaseResolver {
 		@Args() condition: FindManyPrescriptionArgs,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Prescription[]> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.prescription.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 }

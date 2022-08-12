@@ -28,6 +28,7 @@ export class AppointmentResolver extends BaseResolver {
 		@Args() condition: FindManyAppointmentArgs,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Appointment[]> {
+		this.cleanEmptyWhereField(condition)
 		return this.prismaService.appointment.findMany({ ...condition, ...this.getPrismaSelect(info) })
 	}
 
@@ -36,6 +37,7 @@ export class AppointmentResolver extends BaseResolver {
 		@Args('where') where: AppointmentWhereInput,
 		@Info() info: GraphQLResolveInfo
 	): Promise<Appointment | null> {
+		this.cleanEmptyWhereField(where)
 		return this.prismaService.appointment.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
 }
