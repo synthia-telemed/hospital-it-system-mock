@@ -1,5 +1,6 @@
 import { AppointmentStatus, Doctor, Medicine, Patient, Prisma, PrismaClient } from '@prisma/client'
 import { faker } from '@faker-js/faker'
+import * as bcrypt from 'bcrypt'
 import * as dayjs from 'dayjs'
 
 const prisma = new PrismaClient()
@@ -60,6 +61,8 @@ const generateDoctors = (n: number): Prisma.DoctorCreateManyInput[] =>
 				'Cardiologist',
 				'Orthopedist',
 			]),
+			username: faker.internet.userName(),
+			password: bcrypt.hashSync('password', 10),
 		}
 	})
 
