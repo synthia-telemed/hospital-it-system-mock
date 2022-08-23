@@ -60,7 +60,7 @@ model Doctor {
   firstname_en String
   lastname_en  String
   position     String
-  username     String
+  username     String        @unique
   password     String
   appointments Appointment[]
 
