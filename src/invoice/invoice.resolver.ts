@@ -26,4 +26,13 @@ export class InvoiceResolver extends BaseResolver {
 		this.cleanEmptyWhereField(where)
 		return this.prismaService.invoice.findFirst({ where, ...this.getPrismaSelect(info) })
 	}
+
+	@Mutation(_returns => Invoice)
+	async paidInvoice(@Args('id') id: number, @Info() info: GraphQLResolveInfo): Promise<Invoice> {
+		return this.prismaService.invoice.update({
+			where: { id },
+			data: { paid: true },
+			...this.getPrismaSelect(info),
+		})
+	}
 }
