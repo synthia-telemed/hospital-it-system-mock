@@ -3,6 +3,7 @@ import { GraphQLResolveInfo } from 'graphql'
 import { BaseResolver } from 'src/base.resolver'
 import { FindManyInvoiceArgs, Invoice, InvoiceCreateInput, InvoiceWhereInput } from 'src/@generated/invoice'
 import { PrismaService } from 'src/prisma.service'
+import { UserInputError } from 'apollo-server-express'
 
 @Resolver(_of => Invoice)
 export class InvoiceResolver extends BaseResolver {
@@ -29,6 +30,9 @@ export class InvoiceResolver extends BaseResolver {
 
 	@Mutation(_returns => Invoice)
 	async paidInvoice(@Args('id') id: number, @Info() info: GraphQLResolveInfo): Promise<Invoice> {
+		const count = await this.prismaService.invoice.count({ where: { id } })
+		if (count == 0) throw new UserInputError('Invoice not found')
+
 		return this.prismaService.invoice.update({
 			where: { id },
 			data: { paid: true },
