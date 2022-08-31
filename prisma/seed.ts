@@ -63,6 +63,7 @@ const generateDoctors = (n: number): Prisma.DoctorCreateManyInput[] =>
 			]),
 			username: faker.internet.userName(),
 			password: bcrypt.hashSync('password', 10),
+			profilePicURL: faker.internet.avatar(),
 		}
 	})
 
