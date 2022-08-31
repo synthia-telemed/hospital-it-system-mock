@@ -52,17 +52,18 @@ model Patient {
 }
 
 model Doctor {
-  id           Int           @id @default(autoincrement())
-  initial_th   String
-  firstname_th String
-  lastname_th  String
-  initial_en   String
-  firstname_en String
-  lastname_en  String
-  position     String
-  username     String        @unique
-  password     String
-  appointments Appointment[]
+  id            Int           @id @default(autoincrement())
+  initial_th    String
+  firstname_th  String
+  lastname_th   String
+  initial_en    String
+  firstname_en  String
+  lastname_en   String
+  position      String
+  username      String        @unique
+  password      String
+  profilePicURL String
+  appointments  Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
