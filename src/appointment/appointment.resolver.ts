@@ -1,4 +1,5 @@
 import { Args, Info, Mutation, Query, Resolver } from '@nestjs/graphql'
+import { UserInputError } from 'apollo-server-express'
 import { GraphQLResolveInfo } from 'graphql'
 import {
 	Appointment,
@@ -39,5 +40,17 @@ export class AppointmentResolver extends BaseResolver {
 	): Promise<Appointment | null> {
 		this.cleanEmptyWhereField(where)
 		return this.prismaService.appointment.findFirst({ where, ...this.getPrismaSelect(info) })
+	}
+
+	@Mutation(_returns => Appointment)
+	async completeAppointment(@Args('id') id: number, @Info() info: GraphQLResolveInfo): Promise<Appointment> {
+		const count = await this.prismaService.appointment.count({ where: { id } })
+		if (count == 0) throw new UserInputError('Appointment not found')
+
+		return this.prismaService.appointment.update({
+			where: { id },
+			data: { status: 'COMPLETED' },
+			...this.getPrismaSelect(info),
+		})
 	}
 }
