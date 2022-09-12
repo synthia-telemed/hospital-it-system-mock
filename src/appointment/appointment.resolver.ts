@@ -7,6 +7,7 @@ import {
 	AppointmentWhereInput,
 	FindManyAppointmentArgs,
 } from 'src/@generated/appointment'
+import { AppointmentStatus } from 'src/@generated/prisma'
 import { BaseResolver } from 'src/base.resolver'
 import { PrismaService } from 'src/prisma.service'
 
@@ -43,13 +44,17 @@ export class AppointmentResolver extends BaseResolver {
 	}
 
 	@Mutation(_returns => Appointment)
-	async completeAppointment(@Args('id') id: number, @Info() info: GraphQLResolveInfo): Promise<Appointment> {
+	async setAppointmentStatus(
+		@Args({ name: 'id', type: () => Number }) id: number,
+		@Args({ name: 'status', type: () => AppointmentStatus }) status: AppointmentStatus,
+		@Info() info: GraphQLResolveInfo
+	): Promise<Appointment> {
 		const count = await this.prismaService.appointment.count({ where: { id } })
 		if (count == 0) throw new UserInputError('Appointment not found')
 
 		return this.prismaService.appointment.update({
 			where: { id },
-			data: { status: 'COMPLETED' },
+			data: { status },
 			...this.getPrismaSelect(info),
 		})
 	}
