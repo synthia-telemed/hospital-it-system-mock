@@ -91,6 +91,7 @@ model Medicine {
   id            Int            @id @default(autoincrement())
   name          String
   description   String
+  pictureURL    String
   prescriptions Prescription[]
 
   createdAt DateTime @default(now())
