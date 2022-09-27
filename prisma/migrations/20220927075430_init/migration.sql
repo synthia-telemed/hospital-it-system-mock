@@ -37,6 +37,9 @@ CREATE TABLE "Doctor" (
     "firstname_en" TEXT NOT NULL,
     "lastname_en" TEXT NOT NULL,
     "position" TEXT NOT NULL,
+    "username" TEXT NOT NULL,
+    "password" TEXT NOT NULL,
+    "profilePicURL" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -48,10 +51,11 @@ CREATE TABLE "Appointment" (
     "id" SERIAL NOT NULL,
     "patientId" TEXT NOT NULL,
     "doctorId" INTEGER NOT NULL,
-    "dateTime" TIMESTAMP(3) NOT NULL,
+    "startDateTime" TIMESTAMP(3) NOT NULL,
+    "endDateTime" TIMESTAMP(3) NOT NULL,
     "detail" TEXT NOT NULL,
     "nextAppointment" TIMESTAMP(3),
-    "status" "AppointmentStatus" NOT NULL DEFAULT E'SCHEDULED',
+    "status" "AppointmentStatus" NOT NULL DEFAULT 'SCHEDULED',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -107,6 +111,9 @@ CREATE TABLE "InvoiceItem" (
 );
 
 -- CreateIndex
+CREATE UNIQUE INDEX "Doctor_username_key" ON "Doctor"("username");
+
+-- CreateIndex
 CREATE UNIQUE INDEX "Invoice_appointmentId_key" ON "Invoice"("appointmentId");
 
 -- AddForeignKey
@@ -116,10 +123,10 @@ ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_patientId_fkey" FOREIGN KE
 ALTER TABLE "Appointment" ADD CONSTRAINT "Appointment_doctorId_fkey" FOREIGN KEY ("doctorId") REFERENCES "Doctor"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Prescription" ADD CONSTRAINT "Prescription_appointmentId_fkey" FOREIGN KEY ("appointmentId") REFERENCES "Appointment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Prescription" ADD CONSTRAINT "Prescription_medicineId_fkey" FOREIGN KEY ("medicineId") REFERENCES "Medicine"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Prescription" ADD CONSTRAINT "Prescription_medicineId_fkey" FOREIGN KEY ("medicineId") REFERENCES "Medicine"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "Prescription" ADD CONSTRAINT "Prescription_appointmentId_fkey" FOREIGN KEY ("appointmentId") REFERENCES "Appointment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Invoice" ADD CONSTRAINT "Invoice_appointmentId_fkey" FOREIGN KEY ("appointmentId") REFERENCES "Appointment"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

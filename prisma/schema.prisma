@@ -75,7 +75,8 @@ model Appointment {
   patientId       String
   doctor          Doctor            @relation(fields: [doctorId], references: [id])
   doctorId        Int
-  dateTime        DateTime
+  startDateTime   DateTime
+  endDateTime     DateTime
   detail          String
   nextAppointment DateTime?
   status          AppointmentStatus @default(SCHEDULED)
