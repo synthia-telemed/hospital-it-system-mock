@@ -9,6 +9,9 @@ import { PrescriptionCreateManyInput } from 'src/@generated/prescription'
 import { InvoiceItemCreateManyInvoiceInput } from 'src/@generated/invoice-item'
 import { InvoiceDiscountCreateManyInvoiceInput } from 'src/@generated/invoice-discount'
 import { GraphQLResolveInfo } from 'graphql'
+import * as dayjs from 'dayjs'
+import * as utc from 'dayjs/plugin/utc'
+dayjs.extend(utc)
 
 @InputType()
 export class GeneratePrescriptionsAndInvoicesInput {
@@ -36,18 +39,13 @@ export class DevResolver extends BaseResolver {
 		const { appointmentIds, prescriptionNums, invoiceItemNums, invoiceDiscountNums } = input
 		const appointment = await this.prismaService.appointment.findUnique({
 			where: { id: appointmentIds },
-			include: {
-				prescriptions: true,
-				invoice: {
-					include: { InvoiceDiscount: true, invoiceItems: true },
-				},
-			},
 		})
 		if (!appointment) throw new UserInputError('Appointment not found')
 		if (appointment.status !== 'COMPLETED') throw new UserInputError('Appointment is not COMPLETED')
 
 		const medicine = await this.prismaService.medicine.findMany({ take: prescriptionNums })
 
+		const nextAppointmentDate = dayjs.utc().add(6, 'month')
 		const itemsPrice = this.randomPrices(invoiceItemNums, 100, 5000)
 		const totalPrice = itemsPrice.reduce((p, c) => p + c, 0)
 		let discountPriuce = this.randomPrices(invoiceDiscountNums, 500, 2000)
@@ -73,8 +71,22 @@ export class DevResolver extends BaseResolver {
 					},
 				},
 			}),
+			this.prismaService.appointment.update({
+				where: { id: appointment.id },
+				data: { nextAppointment: nextAppointmentDate.toDate() },
+			}),
+			this.prismaService.appointment.create({
+				data: {
+					detail: faker.lorem.sentences(),
+					endDateTime: nextAppointmentDate.add(30, 'minute').toDate(),
+					startDateTime: nextAppointmentDate.toDate(),
+					doctorId: appointment.doctorId,
+					patientId: appointment.patientId,
+					status: 'SCHEDULED',
+				},
+			}),
 		]
-		await Promise.all(ops)
+		await this.prismaService.$transaction(ops)
 		return await this.prismaService.appointment.findUnique({
 			where: { id: appointment.id },
 			...this.getPrismaSelect(info),
