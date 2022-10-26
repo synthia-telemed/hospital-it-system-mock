@@ -30,22 +30,23 @@ enum AppointmentStatus {
 }
 
 model Patient {
-  id           String        @id
-  initial_th   String
-  firstname_th String
-  lastname_th  String
-  initial_en   String
-  firstname_en String
-  lastname_en  String
-  nationality  String
-  nationalId   String?
-  passportId   String?
-  phoneNumber  String
-  weight       Float
-  height       Float
-  birthDate    DateTime
-  bloodType    BloodType
-  appointments Appointment[]
+  id            String        @id
+  initial_th    String
+  firstname_th  String
+  lastname_th   String
+  initial_en    String
+  firstname_en  String
+  lastname_en   String
+  nationality   String
+  nationalId    String?
+  passportId    String?
+  phoneNumber   String
+  weight        Float
+  height        Float
+  birthDate     DateTime
+  profilePicURL String
+  bloodType     BloodType
+  appointments  Appointment[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
