@@ -10,9 +10,12 @@ import { PrescriptionModule } from './prescription/prescription.module'
 import { InvoiceModule } from './invoice/invoice.module'
 import { AppointmentModule } from './appointment/appointment.module'
 import { DevModule } from './dev/dev.module'
+import { NotificationModule } from './notification/notification.module'
+import { ConfigModule } from '@nestjs/config'
 
 @Module({
 	imports: [
+		ConfigModule.forRoot({ isGlobal: true }),
 		PatientModule,
 		GraphQLModule.forRoot<ApolloDriverConfig>({
 			driver: ApolloDriver,
@@ -27,6 +30,7 @@ import { DevModule } from './dev/dev.module'
 		InvoiceModule,
 		AppointmentModule,
 		DevModule,
+		NotificationModule,
 	],
 	controllers: [AppController],
 })

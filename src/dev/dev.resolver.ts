@@ -11,6 +11,7 @@ import { InvoiceDiscountCreateManyInvoiceInput } from 'src/@generated/invoice-di
 import { GraphQLResolveInfo } from 'graphql'
 import * as dayjs from 'dayjs'
 import * as utc from 'dayjs/plugin/utc'
+import { NotificationMessage, NotificationService } from 'src/notification/notification.service'
 dayjs.extend(utc)
 
 @InputType()
@@ -27,7 +28,10 @@ export class GeneratePrescriptionsAndInvoicesInput {
 
 @Resolver()
 export class DevResolver extends BaseResolver {
-	constructor(private readonly prismaService: PrismaService) {
+	constructor(
+		private readonly prismaService: PrismaService,
+		private readonly notificationService: NotificationService
+	) {
 		super()
 	}
 
@@ -39,6 +43,7 @@ export class DevResolver extends BaseResolver {
 		const { appointmentIds, prescriptionNums, invoiceItemNums, invoiceDiscountNums } = input
 		const appointment = await this.prismaService.appointment.findUnique({
 			where: { id: appointmentIds },
+			include: { doctor: true },
 		})
 		if (!appointment) throw new UserInputError('Appointment not found')
 		if (appointment.status !== 'COMPLETED') throw new UserInputError('Appointment is not COMPLETED')
@@ -87,6 +92,14 @@ export class DevResolver extends BaseResolver {
 			}),
 		]
 		await this.prismaService.$transaction(ops)
+		const doctorFullName = `${appointment.doctor.initial_en} ${appointment.doctor.firstname_en} ${appointment.doctor.lastname_en}`
+		const notfiMessage: NotificationMessage = {
+			id: appointment.patientId,
+			title: 'Prescriptions and invoices are ready',
+			body: `Prescriptions and invoices from from your appointment with ${doctorFullName} are ready. Check the appointment detail for the payment.`,
+			data: { appointmentID: `${appointment.id}` },
+		}
+		this.notificationService.sendNotification(notfiMessage)
 		return await this.prismaService.appointment.findUnique({
 			where: { id: appointment.id },
 			...this.getPrismaSelect(info),
