@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq'
+import { ConfigService } from '@nestjs/config'
 
 export interface NotificationMessage {
 	id: string
@@ -10,9 +11,14 @@ export interface NotificationMessage {
 
 @Injectable()
 export class NotificationService {
-	constructor(private readonly amqpConnection: AmqpConnection) {}
+	private readonly exchangeKey: string
+	private readonly routingKey: string
+	constructor(private readonly amqpConnection: AmqpConnection, private readonly configService: ConfigService) {
+		this.exchangeKey = configService.get('RABBITMQ_EXCHANGE_NAME')
+		this.routingKey = configService.get('RABBITMQ_ROUTING_KEY')
+	}
 
 	sendNotification(payload: NotificationMessage) {
-		this.amqpConnection.publish('', 'push-notification', payload)
+		this.amqpConnection.publish(this.exchangeKey, this.routingKey, payload)
 	}
 }

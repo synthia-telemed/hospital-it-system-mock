@@ -12,9 +12,17 @@ import { ConfigModule, ConfigService } from '@nestjs/config'
 				const rabbitmqURL = configService.get('RABBITMQ_URL')
 				return {
 					uri: rabbitmqURL,
+					exchanges: [
+						{
+							name: configService.get('RABBITMQ_EXCHANGE_NAME'),
+							type: 'direct',
+							createExchangeIfNotExists: true,
+						},
+					],
 				}
 			},
 		}),
+		ConfigModule,
 	],
 	providers: [NotificationService],
 	exports: [NotificationService],
