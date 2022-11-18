@@ -1,5 +1,5 @@
-import { Args, Field, Info, InputType, Mutation, Resolver } from '@nestjs/graphql'
-import { Medicine } from '@prisma/client'
+import { Args, Field, Info, InputType, Int, Mutation, Resolver } from '@nestjs/graphql'
+import { AppointmentStatus, Medicine } from '@prisma/client'
 import { UserInputError } from 'apollo-server-express'
 import { faker } from '@faker-js/faker'
 import { Appointment } from 'src/@generated/appointment'
@@ -33,6 +33,37 @@ export class DevResolver extends BaseResolver {
 		private readonly notificationService: NotificationService
 	) {
 		super()
+	}
+
+	@Mutation(_return => Appointment)
+	async resetDemoAppointment(
+		@Args({ name: 'appointmentID', type: () => Int }) appointmentID: number,
+		@Info() info: GraphQLResolveInfo
+	) {
+		const appointment = await this.prismaService.appointment.findUnique({
+			select: { id: true, status: true, nextAppointment: true, invoice: { select: { id: true } } },
+			where: { id: appointmentID },
+		})
+		if (!appointment) throw new UserInputError('Appointment not found')
+		const nextAppointment = await this.prismaService.appointment.findFirst({
+			select: { id: true },
+			where: { startDateTime: appointment.nextAppointment },
+		})
+		await Promise.all([
+			this.prismaService.prescription.deleteMany({ where: { appointmentId: appointmentID } }),
+			this.prismaService.invoiceItem.deleteMany({ where: { invoiceId: appointment.invoice.id } }),
+			this.prismaService.invoiceDiscount.deleteMany({ where: { invoiceId: appointment.invoice.id } }),
+			this.prismaService.appointment.update({
+				where: { id: appointmentID },
+				data: { status: AppointmentStatus.SCHEDULED, nextAppointment: null },
+			}),
+			this.prismaService.appointment.delete({ where: { id: nextAppointment.id } }),
+		])
+		await this.prismaService.invoice.delete({ where: { id: appointment.invoice.id } })
+		return await this.prismaService.appointment.findUnique({
+			where: { id: appointment.id },
+			...this.getPrismaSelect(info),
+		})
 	}
 
 	@Mutation(_return => Appointment)
