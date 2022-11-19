@@ -45,21 +45,32 @@ export class DevResolver extends BaseResolver {
 			where: { id: appointmentID },
 		})
 		if (!appointment) throw new UserInputError('Appointment not found')
-		const nextAppointment = await this.prismaService.appointment.findFirst({
-			select: { id: true },
-			where: { startDateTime: appointment.nextAppointment },
-		})
-		await Promise.all([
-			this.prismaService.prescription.deleteMany({ where: { appointmentId: appointmentID } }),
-			this.prismaService.invoiceItem.deleteMany({ where: { invoiceId: appointment.invoice.id } }),
-			this.prismaService.invoiceDiscount.deleteMany({ where: { invoiceId: appointment.invoice.id } }),
+
+		const deleteOps: Promise<any>[] = [
 			this.prismaService.appointment.update({
 				where: { id: appointmentID },
 				data: { status: AppointmentStatus.SCHEDULED, nextAppointment: null },
 			}),
-			this.prismaService.appointment.delete({ where: { id: nextAppointment.id } }),
-		])
-		await this.prismaService.invoice.delete({ where: { id: appointment.invoice.id } })
+			this.prismaService.prescription.deleteMany({ where: { appointmentId: appointmentID } }),
+		]
+
+		if (appointment.nextAppointment) {
+			const nextAppointment = await this.prismaService.appointment.findFirst({
+				select: { id: true },
+				where: { startDateTime: appointment.nextAppointment },
+			})
+			if (nextAppointment)
+				deleteOps.push(this.prismaService.appointment.delete({ where: { id: nextAppointment.id } }))
+		}
+		if (appointment.invoice) {
+			deleteOps.push(
+				this.prismaService.invoiceItem.deleteMany({ where: { invoiceId: appointment.invoice.id } }),
+				this.prismaService.invoiceDiscount.deleteMany({ where: { invoiceId: appointment.invoice.id } })
+			)
+		}
+
+		await Promise.all(deleteOps)
+		if (appointment.invoice) await this.prismaService.invoice.delete({ where: { id: appointment.invoice.id } })
 		return await this.prismaService.appointment.findUnique({
 			where: { id: appointment.id },
 			...this.getPrismaSelect(info),
