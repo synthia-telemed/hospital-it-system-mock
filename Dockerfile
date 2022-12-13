@@ -7,6 +7,7 @@ COPY . .
 RUN yarn build
 
 FROM node:16-alpine 
+RUN apk add --update libc6-compat openssl openssl-dev
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
