@@ -1,4 +1,4 @@
-FROM node:16-alpine as builder
+FROM node:16-alpine3.16 as builder
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
@@ -6,8 +6,7 @@ RUN yarn install --frozen-lockfile
 COPY . .
 RUN yarn build
 
-FROM node:16-alpine 
-RUN apk add --update libc6-compat openssl openssl-dev
+FROM node:16-alpine3.16
 WORKDIR /app
 COPY package.json .
 COPY yarn.lock .
